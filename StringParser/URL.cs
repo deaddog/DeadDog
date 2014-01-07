@@ -21,7 +21,7 @@ namespace DeadDog
         /// <param name="url">The http url associated with this instance. Must begin with "http://"</param>
         public URL(string url)
         {
-            if (!url.StartsWith("http://"))
+            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
                 throw new ArgumentException("The url specified must always begin with \"http://\"", "url");
             this.url = url;
         }
