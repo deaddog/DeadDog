@@ -6,11 +6,12 @@ using System.Text;
 namespace DeadDog
 {
     /// <summary>
-    /// Defines a method that will attempt to parse a string into type <typeparamref name="T"/>.
+    /// Represents a method that attempts to parse a string to a different type.
     /// </summary>
-    /// <typeparam name="T">The type into which the string should be parsed.</typeparam>
-    /// <param name="input">The string to parse.</param>
-    /// <param name="value">The result of parsing. If parsing fails, this value should be disregarded.</param>
-    /// <returns>True, if parsing was succesfull; otherwise false.</returns>
+    /// <typeparam name="T">The type that the string should be parsed to.</typeparam>
+    /// <param name="text">The input string to parse.</param>
+    /// <param name="value">When the method returns, contains the parsed value; if parsing was succesfull.
+    /// If parsing fails, this value should be disregarded.</param>
+    /// <returns>A boolean value indicating weather parsing was succesfull.</returns>
     public delegate bool TryParse<T>(string input, out T value);
 }

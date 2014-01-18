@@ -6,16 +6,6 @@ using System.Text;
 namespace DeadDog.Console
 {   
     /// <summary>
-    /// Represents a method that attempts to parse a string to a different type.
-    /// </summary>
-    /// <typeparam name="T">The type that the string should be parsed to.</typeparam>
-    /// <param name="text">The input string to parse.</param>
-    /// <param name="value">When the method returns, contains the parsed value; if parsing was succesfull.
-    /// If parsing fails, this value should be disregarded.</param>
-    /// <returns>A boolean value indicating weather parsing was succesfull.</returns>
-    public delegate bool TryParse<T>(string text, out T value);
-
-    /// <summary>
     /// Defines method enabling simple input of values directly from <see cref="Console"/>.    
     /// </summary>
     public static class Parsing
