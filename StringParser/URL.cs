@@ -215,31 +215,33 @@ namespace DeadDog
             int attempt = 0;
             int maxattempt = 3;
 
-        jan:
-            try
-            {
-                attempt++;
+            string uri = null;
 
-                request = (HttpWebRequest)WebRequest.Create(this.url);
-                response = (HttpWebResponse)request.GetResponse();
+            while (attempt < maxattempt)
+                try
+                {
+                    attempt++;
 
-                string uri = request.Address.AbsoluteUri.ToString();
+                    request = (HttpWebRequest)WebRequest.Create(this.url);
+                    response = (HttpWebResponse)request.GetResponse();
 
-                response.Close();
-
-                return new URL(uri);
-            }
-            catch
-            {
-                System.Threading.Thread.Sleep(2000);
-                if (attempt < maxattempt)
-                    goto jan;
-                else
+                    uri = request.Address.AbsoluteUri.ToString();
+                }
+                catch
+                {
+                    System.Threading.Thread.Sleep(2000);
+                    if (attempt == maxattempt)
+                        throw new Exception("File could not be loaded after " + maxattempt + " attempts.");
+                }
+                finally
                 {
                     response.Close();
-                    throw new Exception("File could not be loaded after " + maxattempt + " attempts.");
                 }
-            }
+
+            if (uri == null)
+                throw new Exception("File could not be loaded.");
+
+            return new URL(uri);
         }
 
         /// <summary>
