@@ -124,13 +124,16 @@ namespace DeadDog
             return null;
         }
 
-        private void LoadToMemoryStream(MemoryStream ms)
+        private void LoadToMemoryStream(Stream stream)
         {
             URL url;
-            LoadToMemoryStream(ms, out url);
+            LoadToMemoryStream(stream, out url);
         }
-        private void LoadToMemoryStream(MemoryStream ms, out URL readURL)
+        private void LoadToMemoryStream(Stream stream, out URL readURL)
         {
+            if (!stream.CanWrite)
+                throw new ArgumentException("The stream must support writing.", "stream");
+
             byte[] buf = new byte[8192];
 
             HttpWebRequest request;
@@ -168,7 +171,7 @@ namespace DeadDog
             {
                 count = resStream.Read(buf, 0, buf.Length);
                 if (count > 0)
-                    ms.Write(buf, 0, count);
+                    stream.Write(buf, 0, count);
             }
             while (count > 0);
             resStream.Dispose();
