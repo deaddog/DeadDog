@@ -124,12 +124,12 @@ namespace DeadDog
             return null;
         }
 
-        private void LoadToStream(Stream stream)
+        public void LoadToStream(Stream stream)
         {
             URL url;
             LoadToStream(stream, out url);
         }
-        private void LoadToStream(Stream stream, out URL readURL)
+        public void LoadToStream(Stream stream, out URL readURL)
         {
             if (!stream.CanWrite)
                 throw new ArgumentException("The stream must support writing.", "stream");
