@@ -44,7 +44,7 @@ namespace DeadDog
             byte[] buffer;
             using (MemoryStream ms = new MemoryStream())
             {
-                LoadToMemoryStream(ms);
+                LoadToStream(ms);
                 buffer = ms.GetBuffer();
             }
 
@@ -65,7 +65,7 @@ namespace DeadDog
             byte[] buffer;
             using (MemoryStream ms = new MemoryStream())
             {
-                LoadToMemoryStream(ms);
+                LoadToStream(ms);
                 buffer = ms.GetBuffer();
             }
 
@@ -92,7 +92,7 @@ namespace DeadDog
             byte[] buffer;
             using (MemoryStream ms = new MemoryStream())
             {
-                LoadToMemoryStream(ms, out readURL);
+                LoadToStream(ms, out readURL);
                 buffer = ms.GetBuffer();
             }
 
@@ -124,12 +124,12 @@ namespace DeadDog
             return null;
         }
 
-        private void LoadToMemoryStream(Stream stream)
+        private void LoadToStream(Stream stream)
         {
             URL url;
-            LoadToMemoryStream(stream, out url);
+            LoadToStream(stream, out url);
         }
-        private void LoadToMemoryStream(Stream stream, out URL readURL)
+        private void LoadToStream(Stream stream, out URL readURL)
         {
             if (!stream.CanWrite)
                 throw new ArgumentException("The stream must support writing.", "stream");
@@ -185,7 +185,7 @@ namespace DeadDog
         {
             Image image;
             MemoryStream ms = new MemoryStream();
-            LoadToMemoryStream(ms);
+            LoadToStream(ms);
             image = Image.FromStream(ms);
             //The MemoryStream should not be disposed, as the Image is bound to this stream.
             //The stream will be disposed by disposing the Image.
