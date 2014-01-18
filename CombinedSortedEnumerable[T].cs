@@ -5,7 +5,7 @@ using System.Text;
 namespace DeadDog
 {
     /// <summary>
-    /// Supports enumeration over a collections of <see cref="IEnumerable{T}"/>.
+    /// Supports enumeration over a collections of <see cref="IEnumerable{T}" />.
     /// Note that these must all adhere to the same sorting.
     /// </summary>
     /// <typeparam name="T">The type of objects to enumerate.</typeparam>
@@ -57,6 +57,35 @@ namespace DeadDog
             CombinedSortedEnumerable<T> cse = new CombinedSortedEnumerable<T>(a.comparison);
             cse.loaders = new List<IEnumerable<T>>();
             cse.loaders.AddRange(a.loaders);
+            cse.loaders.AddRange(b.loaders);
+            return cse;
+        }
+
+        /// <summary>
+        /// Joins an <see cref="IEnumerable{T}"/> into an existing <see cref="CombinedSortedEnumerable{T}"/>.
+        /// </summary>
+        /// <param name="a">The <see cref="CombinedSortedEnumerable{T}"/>.</param>
+        /// <param name="b">The <see cref="IEnumerable{T}"/>.</param>
+        /// <returns>A new <see cref="CombinedSortedEnumerable{T}"/> containing the full collection of enumerables.</returns>
+        public static CombinedSortedEnumerable<T> operator +(CombinedSortedEnumerable<T> a, IEnumerable<T> b)
+        {
+            CombinedSortedEnumerable<T> cse = new CombinedSortedEnumerable<T>(a.comparison);
+            cse.loaders = new List<IEnumerable<T>>();
+            cse.loaders.AddRange(a.loaders);
+            cse.loaders.Add(b);
+            return cse;
+        }
+        /// <summary>
+        /// Joins an <see cref="IEnumerable{T}"/> into an existing <see cref="CombinedSortedEnumerable{T}"/>.
+        /// </summary>
+        /// <param name="a">The <see cref="IEnumerable{T}"/>.</param>
+        /// <param name="b">The <see cref="CombinedSortedEnumerable{T}"/>.</param>
+        /// <returns>A new <see cref="CombinedSortedEnumerable{T}"/> containing the full collection of enumerables.</returns>
+        public static CombinedSortedEnumerable<T> operator +(IEnumerable<T> a, CombinedSortedEnumerable<T> b)
+        {
+            CombinedSortedEnumerable<T> cse = new CombinedSortedEnumerable<T>(b.comparison);
+            cse.loaders = new List<IEnumerable<T>>();
+            cse.loaders.Add(a);
             cse.loaders.AddRange(b.loaders);
             return cse;
         }
