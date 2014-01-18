@@ -146,7 +146,7 @@ namespace DeadDog
             readURL = null;
             int attempt = 0;
 
-            while (attempt < MAX_ATTEMPTS)
+            while (attempt < MAX_ATTEMPTS && resStream == null)
                 try
                 {
                     attempt++;
@@ -217,7 +217,7 @@ namespace DeadDog
             int attempt = 0;
             string uri = null;
 
-            while (attempt < MAX_ATTEMPTS)
+            while (attempt < MAX_ATTEMPTS && uri == null)
                 try
                 {
                     attempt++;
