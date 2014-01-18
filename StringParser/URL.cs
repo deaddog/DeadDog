@@ -131,36 +131,34 @@ namespace DeadDog
         }
         private void LoadToMemoryStream(MemoryStream ms, out URL readURL)
         {
-            byte[] buf;
+            byte[] buf = new byte[8192];
 
             HttpWebRequest request;
-            HttpWebResponse response;
-            Stream resStream;
+            HttpWebResponse response = null;
+            Stream resStream = null;
+            readURL = null;
 
             int attempt = 0;
             int maxattempt = 3;
 
-        jan:
-            try
-            {
-                attempt++;
-                buf = new byte[8192];
+            while (attempt < maxattempt)
+                try
+                {
+                    attempt++;
 
-                request = (HttpWebRequest)WebRequest.Create(this.url);
-                response = (HttpWebResponse)request.GetResponse();
+                    request = (HttpWebRequest)WebRequest.Create(this.url);
+                    response = (HttpWebResponse)request.GetResponse();
 
-                readURL = new URL(request.Address.AbsoluteUri);
+                    readURL = new URL(request.Address.AbsoluteUri);
 
-                resStream = response.GetResponseStream();
-            }
-            catch
-            {
-                System.Threading.Thread.Sleep(2000);
-                if (attempt < maxattempt)
-                    goto jan;
-                else
-                    throw new Exception("File could not be loaded after " + maxattempt + " attempts.");
-            }
+                    resStream = response.GetResponseStream();
+                }
+                catch
+                {
+                    System.Threading.Thread.Sleep(2000);
+                    if (attempt == maxattempt)
+                        throw new Exception("File could not be loaded after " + maxattempt + " attempts.");
+                }
 
             if (response.ContentLength > int.MaxValue)
                 throw new InvalidOperationException("Cannot read files larger than 2gb (UINT32 max)");
