@@ -199,29 +199,8 @@ namespace DeadDog
         /// <param name="localFile">The local path where the contents of the url is stored.</param>
         public void GetFile(string localFile)
         {
-            byte[] buf = new byte[8192];
-
-            HttpWebRequest request = (HttpWebRequest)
-                WebRequest.Create(this.url);
-
-            HttpWebResponse response = (HttpWebResponse)
-                request.GetResponse();
-
-            Stream resStream = response.GetResponseStream();
-
-            int count = 0;
             using (FileStream fs = new FileStream(localFile, FileMode.Create, FileAccess.Write))
-            {
-                do
-                {
-                    count = resStream.Read(buf, 0, buf.Length);
-                    if (count != 0)
-                    {
-                        fs.Write(buf, 0, count);
-                    }
-                }
-                while (count > 0);
-            }
+                LoadToStream(fs);
         }
 
         /// <summary>
