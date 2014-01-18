@@ -13,6 +13,10 @@ namespace DeadDog
     /// </summary>
     public class URL : IEquatable<URL>
     {
+        private const int MAX_ATTEMPTS = 3;
+        private const int THREAD_SLEEP = 2000;
+        private const int BUFFER_SIZE = 8192;
+
         private string url;
 
         /// <summary>
@@ -134,17 +138,15 @@ namespace DeadDog
             if (!stream.CanWrite)
                 throw new ArgumentException("The stream must support writing.", "stream");
 
-            byte[] buf = new byte[8192];
+            byte[] buf = new byte[BUFFER_SIZE];
 
             HttpWebRequest request;
             HttpWebResponse response = null;
             Stream resStream = null;
             readURL = null;
-
             int attempt = 0;
-            int maxattempt = 3;
 
-            while (attempt < maxattempt)
+            while (attempt < MAX_ATTEMPTS)
                 try
                 {
                     attempt++;
@@ -158,9 +160,9 @@ namespace DeadDog
                 }
                 catch
                 {
-                    System.Threading.Thread.Sleep(2000);
-                    if (attempt == maxattempt)
-                        throw new Exception("File could not be loaded after " + maxattempt + " attempts.");
+                    System.Threading.Thread.Sleep(THREAD_SLEEP);
+                    if (attempt == MAX_ATTEMPTS)
+                        throw new Exception("File could not be loaded after " + MAX_ATTEMPTS + " attempts.");
                 }
 
             if (response.ContentLength > int.MaxValue)
@@ -213,11 +215,9 @@ namespace DeadDog
             HttpWebResponse response = null;
 
             int attempt = 0;
-            int maxattempt = 3;
-
             string uri = null;
 
-            while (attempt < maxattempt)
+            while (attempt < MAX_ATTEMPTS)
                 try
                 {
                     attempt++;
@@ -229,9 +229,9 @@ namespace DeadDog
                 }
                 catch
                 {
-                    System.Threading.Thread.Sleep(2000);
-                    if (attempt == maxattempt)
-                        throw new Exception("File could not be loaded after " + maxattempt + " attempts.");
+                    System.Threading.Thread.Sleep(THREAD_SLEEP);
+                    if (attempt == MAX_ATTEMPTS)
+                        throw new Exception("File could not be loaded after " + MAX_ATTEMPTS + " attempts.");
                 }
                 finally
                 {
