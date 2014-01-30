@@ -26,7 +26,7 @@ namespace DeadDog
         public URL(string url)
         {
             if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-                throw new ArgumentException("The url specified must always begin with \"http://\"", "url");
+                throw new ArgumentException("The url specified must always begin with \"http://\" or \"https://\"", "url");
             this.url = url;
         }
 
