@@ -123,9 +123,38 @@ namespace DeadDog.FTP
         }
         public FTPFileInfo Upload(FileInfo file, string name)
         {
+            if (!file.Exists)
+                return null;
+
+            int count = 3;
             FTPFileInfo ftpFile;
-            using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
-                ftpFile = Upload(stream, name);
+            FileStream stream = null;
+            MemoryStream ms = null;
+
+        go:
+            try
+            {
+                stream = new FileStream(file.FullName, FileMode.Open);
+                ms = new MemoryStream((int)stream.Length);
+            }
+            catch (IOException e)
+            {
+                if (count-- > 0)
+                    goto go;
+            }
+
+            byte[] buffer = new byte[8192];
+            int c = 0;
+
+            while ((c = stream.Read(buffer, 0, buffer.Length)) > 0)
+                ms.Write(buffer, 0, c);
+            stream.Close();
+            stream.Dispose();
+
+            ftpFile = Upload(ms, name);
+            ms.Close();
+            ms.Dispose();
+
             return ftpFile;
         }
 
