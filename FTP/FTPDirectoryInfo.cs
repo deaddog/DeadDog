@@ -85,8 +85,38 @@ namespace DeadDog.FTP
         {
             stream.Seek(0, SeekOrigin.Begin);
 
-            return null;
+            try
+            {
+                FtpWebRequest ftp;
+                ftp = (FtpWebRequest)FtpWebRequest.Create(new Uri(Fullname + name));
+                ftp.Credentials = this.client.Credentials;
+                ftp.Method = WebRequestMethods.Ftp.UploadFile;
+
+                ftp.ContentLength = stream.Length;
+                var requestStream = ftp.GetRequestStream();
+
+                byte[] buffer = new byte[8192];
+                int c = 0;
+
+                while ((c = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    requestStream.Write(buffer, 0, c);
+                requestStream.Close();
+
+                FtpWebResponse response = ftp.GetResponse() as FtpWebResponse;
+
+                var v = response.StatusDescription;
+                response.Close();
+                if (!v.StartsWith("226"))
+                    return null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            return new FTPFileInfo(name, DateTime.Now, this.client, this);
         }
+
         public FTPFileInfo Upload(FileInfo file)
         {
             return Upload(file, file.Name);
