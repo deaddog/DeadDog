@@ -117,13 +117,13 @@ namespace DeadDog.FTP
             return new FTPFileInfo(name, DateTime.Now, this.client, this);
         }
 
-        public FTPFileInfo Upload(FileInfo file)
+        public FTPFileInfo Upload(string filepath)
         {
-            return Upload(file, file.Name);
+            return Upload(filepath, Path.GetFileName(filepath));
         }
-        public FTPFileInfo Upload(FileInfo file, string name)
+        public FTPFileInfo Upload(string filepath, string name)
         {
-            if (!file.Exists)
+            if (!new FileInfo(filepath).Exists)
                 return null;
 
             int count = 3;
@@ -134,7 +134,7 @@ namespace DeadDog.FTP
         go:
             try
             {
-                stream = new FileStream(file.FullName, FileMode.Open);
+                stream = new FileStream(filepath, FileMode.Open);
                 ms = new MemoryStream((int)stream.Length);
             }
             catch (IOException e)
