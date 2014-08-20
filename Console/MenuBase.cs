@@ -209,10 +209,11 @@ namespace DeadDog.Console
             for (int i = 0; i < texts.Count; i++)
             {
                 System.Console.ForegroundColor = colors[i];
-                if (i < 9)
-                    System.Console.WriteLine("  {0}: {1}", (i + 1), texts[i]);
+                char prefix = prefixFromIndex(i);
+                if (prefix == ' ')
+                    System.Console.WriteLine("     {1}", prefix, texts[i]);
                 else
-                    System.Console.WriteLine("     " + texts[i]);
+                    System.Console.WriteLine("  {0}: {1}", prefix, texts[i]);
             }
 
             if (CanCancel)
@@ -328,12 +329,12 @@ namespace DeadDog.Console
                 case MenuLabeling.None:
                     return ' ';
                 case MenuLabeling.Numbers:
-                    return index <= 9 ? (char)('0' + index) : ' ';
+                    return index < 9 ? (char)('1' + index) : ' ';
                 case MenuLabeling.Letters:
-                    return (index + 'A') <= 'Z' ? (char)(index + 'A') : ' ';
+                    return (index + 'a') <= 'z' ? (char)(index + 'a') : ' ';
                 case MenuLabeling.NumbersAndLetters:
-                    return index <= 9 ? (char)('0' + index) :
-                        (index - 10 + 'A') <= 'Z' ? (char)(index - 10 + 'A') : ' ';
+                    return index < 9 ? (char)('1' + index) :
+                        (index - 9 + 'a') <= 'z' ? (char)(index - 9 + 'a') : ' ';
                 default:
                     return ' ';
             }
