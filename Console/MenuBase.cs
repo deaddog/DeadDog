@@ -235,9 +235,10 @@ namespace DeadDog.Console
             while (selected == -1)
             {
                 ConsoleKeyInfo key = System.Console.ReadKey(true);
-                if (char.IsNumber(key.KeyChar) && int.Parse(key.KeyChar.ToString()) <= texts.Count)
+                int keyIndex = indexFromKey(key.KeyChar);
+                if (keyIndex < texts.Count)
                 {
-                    selected = int.Parse(key.KeyChar.ToString()) - 1;
+                    selected = keyIndex;
                     if (selected == -1 && CanCancel)
                         selected = texts.Count;
                 }
@@ -337,6 +338,30 @@ namespace DeadDog.Console
                         (index - 9 + 'a') <= 'z' ? (char)(index - 9 + 'a') : ' ';
                 default:
                     return ' ';
+            }
+        }
+
+        private int indexFromKey(char keyChar)
+        {
+            if (keyChar == '0')
+                return -1;
+
+            if(char.IsUpper(keyChar))
+                keyChar = char.ToLower(keyChar);
+
+            switch (labels)
+            {
+                case MenuLabeling.None:
+                    return int.MaxValue;
+                case MenuLabeling.Numbers:
+                    return char.IsNumber(keyChar) ? int.Parse(keyChar.ToString()) - 1 : int.MaxValue;
+                case MenuLabeling.Letters:
+                    return char.IsLetter(keyChar) ? keyChar - 'a' : int.MaxValue;
+                case MenuLabeling.NumbersAndLetters:
+                    return char.IsNumber(keyChar) ? int.Parse(keyChar.ToString()) - 1 :
+                        char.IsLetter(keyChar) ? keyChar - 'a' + 9 : int.MaxValue;
+                default:
+                    return int.MaxValue;
             }
         }
 
