@@ -8,24 +8,23 @@ namespace DeadDog.Console
     /// <summary>
     /// Defines the labels used when displaying menues.
     /// </summary>
-    [Flags]
     public enum MenuLabeling
     {
         /// <summary>
         /// No labeling is used.
         /// </summary>
-        None = 0,
+        None,
         /// <summary>
         /// Numbers (0-9) are used.
         /// </summary>
-        Numbers = 1,
+        Numbers,
         /// <summary>
         /// Letters (a-z) are used.
         /// </summary>
-        Letters = 2,
+        Letters,
         /// <summary>
         /// Numbers (0-9) and then letters (a-z) are used.
         /// </summary>
-        NumbersAndLetters = 3
+        NumbersAndLetters
     }
 }
