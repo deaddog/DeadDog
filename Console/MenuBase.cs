@@ -201,8 +201,6 @@ namespace DeadDog.Console
             padR -= padL;
 
             int width = menuWidth - 6 - title.Length;
-            string paddedTitle = "  ".PadLeft(padL, paddingChar) + title + "  ".PadRight(padR, paddingChar);
-            //System.Console.WriteLine(paddedTitle + "\n");
             System.Console.WriteLine(CenterString(title, menuWidth, paddingChar) + "\n");
             WriteLines(description, "  ", menuWidth);
 
