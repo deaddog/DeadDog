@@ -160,9 +160,10 @@ namespace DeadDog
                 }
                 catch
                 {
-                    System.Threading.Thread.Sleep(THREAD_SLEEP);
                     if (attempt == MAX_ATTEMPTS)
                         throw new Exception("File could not be loaded after " + MAX_ATTEMPTS + " attempts.");
+                    else
+                        System.Threading.Thread.Sleep(THREAD_SLEEP);
                 }
 
             if (response.ContentLength > int.MaxValue)
