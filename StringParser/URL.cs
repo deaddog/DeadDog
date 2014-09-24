@@ -13,11 +13,19 @@ namespace DeadDog
     /// </summary>
     public class URL : IEquatable<URL>
     {
+        private static readonly Regex urlRegex = new Regex("^(?<protocol>https?)://(?<domain>[^/]+)((?<path>/([^/]+/)*)(?<page>.*))?$");
         private const int MAX_ATTEMPTS = 3;
         private const int THREAD_SLEEP = 2000;
         private const int BUFFER_SIZE = 8192;
 
-        private string url;
+        private string url
+        {
+            get { return string.Format("{0}://{1}{2}{3}", protocol, domain, path, page); }
+        }
+        private string protocol;
+        private string domain;
+        private string path;
+        private string page;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="URL"/> class.
@@ -25,9 +33,18 @@ namespace DeadDog
         /// <param name="url">The http url associated with this instance. Must begin with "http://"</param>
         public URL(string url)
         {
-            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-                throw new ArgumentException("The url specified must always begin with \"http://\" or \"https://\"", "url");
-            this.url = url;
+            Match match = urlRegex.Match(url);
+
+            if (!match.Success)
+                throw new ArgumentException("The url \"" + url + "\" could not be parsed.", "url");
+
+            protocol = match.Groups["protocol"].Value;
+            domain = match.Groups["domain"].Value;
+            path = match.Groups["path"].Value;
+            page = match.Groups["page"].Value;
+
+            if (url != this.Address)
+                throw new ArgumentException("The url \"" + url + "\" was not parsed properly.", "url");
         }
 
         /// <summary>
@@ -251,6 +268,35 @@ namespace DeadDog
         public string Address
         {
             get { return url; }
+        }
+
+        /// <summary>
+        /// Gets the protocol (http or https) for this <see cref="URL"/>.
+        /// </summary>
+        public string Protocol
+        {
+            get { return protocol; }
+        }
+        /// <summary>
+        /// Gets the domain, including subdomain and toplevel domain for this <see cref="URL"/> (eg. "mail.google.com").
+        /// </summary>
+        public string Domain
+        {
+            get { return domain; }
+        }
+        /// <summary>
+        /// Gets the path for this <see cref="URL"/>, not including the page name (eg. "/myfiles/").
+        /// </summary>
+        public string Path
+        {
+            get { return path; }
+        }
+        /// <summary>
+        /// Gets the page name for this <see cref="URL"/>, not including the path (eg. "index.html").
+        /// </summary>
+        public string Page
+        {
+            get { return page; }
         }
 
         /// <summary>
