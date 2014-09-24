@@ -38,13 +38,37 @@ namespace DeadDog
             if (!match.Success)
                 throw new ArgumentException("The url \"" + url + "\" could not be parsed.", "url");
 
-            protocol = match.Groups["protocol"].Value;
-            domain = match.Groups["domain"].Value;
-            path = match.Groups["path"].Value;
+            protocol = match.Groups["protocol"].Value.ToLower();
+            domain = match.Groups["domain"].Value.ToLower();
+            path = replaceEncoding(match.Groups["path"].Value);
             page = match.Groups["page"].Value;
+
+            path = Regex.Replace(path, "%[a-zA-Z0-9][a-zA-Z0-9]", m => replaceEncoding(m.Value.ToUpper()));
+            path = Regex.Replace(path, "%[a-zA-Z0-9][a-zA-Z0-9]", m => replaceEncoding(m.Value.ToUpper()));
 
             if (url != this.Address)
                 throw new ArgumentException("The url \"" + url + "\" was not parsed properly.", "url");
+        }
+
+        private static string replaceEncoding(string input)
+        {
+            return Regex.Replace(input, "%(?<val>[a-zA-Z0-9][a-zA-Z0-9])", m =>
+                {
+                    int i = int.Parse(m.Groups["val"].Value, System.Globalization.NumberStyles.HexNumber);
+
+                    if (
+                        (i >= 0x41 && i <= 0x5A) ||
+                        (i >= 0x61 && i <= 0x7A) ||
+                        (i >= 0x30 && i <= 0x39) ||
+                        i == 0x2D ||
+                        i == 0x2E ||
+                        i == 0x5F ||
+                        i == 0x7E
+                       )
+                        return ((char)i).ToString();
+                    else
+                        return m.Value;
+                });
         }
 
         /// <summary>
