@@ -46,6 +46,8 @@ namespace DeadDog
             path = Regex.Replace(path, "%[a-zA-Z0-9][a-zA-Z0-9]", m => replaceEncoding(m.Value.ToUpper()));
             path = Regex.Replace(path, "%[a-zA-Z0-9][a-zA-Z0-9]", m => replaceEncoding(m.Value.ToUpper()));
 
+            if (!path.StartsWith("/"))
+                path = "/";
         }
 
         private static string replaceEncoding(string input)
