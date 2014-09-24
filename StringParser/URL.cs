@@ -48,6 +48,25 @@ namespace DeadDog
         }
 
         /// <summary>
+        /// Parses a link and returns a <see cref="URL"/> with respect to the page on which the link was found.
+        /// </summary>
+        /// <param name="link">The link to parse.</param>
+        /// <returns>A <see cref="URL"/> representing the address pointed to from the current <see cref="URL"/> to <paramref name="link"/>.</returns>
+        public URL GetURLFromLink(string link)
+        {
+            if (Regex.IsMatch(link, "^https?://"))
+                return new URL(link);
+            else if (Regex.IsMatch(link, "^//"))
+                return new URL(this.protocol + ":" + link);
+            else if (Regex.IsMatch(link, "^/"))
+                return new URL(this.protocol + "://" + this.domain + link);
+            else
+                return new URL(this.protocol + "://" + this.domain + this.path + link);
+
+            throw new ArgumentException("Unable to parse link.", "link");
+        }
+
+        /// <summary>
         /// Creates a webrequest and returns the response stream converted to a <see cref="String"/> using ASCII encoding.
         /// </summary>
         /// <returns>The contents of the URL as a <see cref="String"/>.</returns>
