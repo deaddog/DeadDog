@@ -47,7 +47,6 @@
     <Compile Include="Console\MenuBase.cs" />
     <Compile Include="Console\MenuLabeling.cs" />
     <Compile Include="Console\Menu[T].cs" />
-    <Compile Include="Console\Parsing.cs" />
     <Compile Include="FTP\FTPClient.cs" />
     <Compile Include="FTP\FTPDirectoryInfo.cs" />
     <Compile Include="FTP\FTPFileInfo.cs" />
